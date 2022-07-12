@@ -25,7 +25,7 @@ struct_message myData;
 
 
 // REPLACE WITH RECEIVER MAC Address
-uint8_t broadcastAddress[] = {0x84, 0xCC, 0xA8, 0xB0, 0x2B, 0x0D};
+uint8_t broadcastAddress[] = {0x48, 0x55, 0x19, 0x00, 0x50, 0x61};
 
 // Callback when data is sent
 void OnDataSent(uint8_t *mac_addr, uint8_t sendStatus) {

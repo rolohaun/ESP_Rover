@@ -1,14 +1,21 @@
-
 #include <ESP8266WiFi.h>
 #include <espnow.h>
 
-int MotorA1 = 4; 
-int MotorA2 = 0;
+//int MotorA1 = 5; 
+//int MotorA2 = 0;
 
-int MotorB1 = 14; 
-int MotorB2 = 12;
+//int MotorB1 = 4; 
+//int MotorB2 = 2;
 
-int LED = 2;
+#define RightMotorSpeed 5
+#define RightMotorDir   0 
+#define LeftMotorSpeed  4
+#define LeftMotorDir    2
+
+int minSpeed = 450;
+int maxSpeed = 1020;
+int noSpeed = 0;
+
 
 typedef struct struct_message {
     int a;
@@ -43,39 +50,66 @@ void setup() {
   //esp_now_set_self_role(ESP_NOW_ROLE_SLAVE);
   // We can register the receiver callback function
   esp_now_register_recv_cb(onDataReceiver);
-  pinMode(LED, OUTPUT);
-  digitalWrite(LED,HIGH);
-  pinMode(MotorA1,OUTPUT); 
-  pinMode(MotorA2,OUTPUT);
-  pinMode(MotorB1,OUTPUT); 
-  pinMode(MotorB2,OUTPUT);
+  //pinMode(LED, OUTPUT);
+  //digitalWrite(LED,HIGH);
+  //pinMode(MotorA1,OUTPUT); 
+  //pinMode(MotorA2,OUTPUT);
+  //pinMode(MotorB1,OUTPUT); 
+  //pinMode(MotorB2,OUTPUT);
+
+    // initial settings for motors off and direction forward
+  pinMode(RightMotorSpeed, OUTPUT);
+  pinMode(LeftMotorSpeed, OUTPUT);
+  pinMode(RightMotorDir, OUTPUT);
+  pinMode(LeftMotorDir, OUTPUT);
+ 
+  digitalWrite(RightMotorSpeed, LOW);
+  digitalWrite(LeftMotorSpeed, LOW);
+  digitalWrite(RightMotorDir, HIGH);
+  digitalWrite(LeftMotorDir,HIGH);
+
+  
   delay(3000); 
 }
 
 
 void loop() {
   if  (myData.a == 3) { // FORWARD
-    digitalWrite(MotorA1,HIGH);
-    digitalWrite(MotorA2,LOW);
-    digitalWrite(MotorB1,HIGH);
-    digitalWrite(MotorB2,LOW); 
+    digitalWrite(RightMotorDir,LOW);
+    digitalWrite(LeftMotorDir,HIGH);
+    analogWrite(RightMotorSpeed,maxSpeed);
+    analogWrite(LeftMotorSpeed,maxSpeed);
+    //digitalWrite(MotorA1,HIGH);
+    //digitalWrite(MotorA2,LOW);
+    //digitalWrite(MotorB1,HIGH);
+    //digitalWrite(MotorB2,LOW); 
   }
    if  (myData.a == 4) { // LEFT
-    digitalWrite(MotorA1,LOW);
-    digitalWrite(MotorA2,HIGH);
-    digitalWrite(MotorB1,HIGH);
-    digitalWrite(MotorB2,LOW); 
+    digitalWrite(RightMotorDir,LOW);
+    digitalWrite(LeftMotorDir,LOW);
+    analogWrite(RightMotorSpeed,maxSpeed);
+    analogWrite(LeftMotorSpeed,maxSpeed);
+    //digitalWrite(MotorA1,LOW);
+    //digitalWrite(MotorA2,HIGH);
+    //digitalWrite(MotorB1,HIGH);
+    //digitalWrite(MotorB2,LOW); 
   }
    if  (myData.a == 2) { // RIGHT
-    digitalWrite(MotorA1,HIGH);
-    digitalWrite(MotorA2,LOW);
-    digitalWrite(MotorB1,LOW);
-    digitalWrite(MotorB2,HIGH); 
+    digitalWrite(RightMotorDir,HIGH);
+    digitalWrite(LeftMotorDir,HIGH);
+    analogWrite(RightMotorSpeed,maxSpeed);
+    analogWrite(LeftMotorSpeed,maxSpeed);
+    //digitalWrite(MotorA1,HIGH);
+    //digitalWrite(MotorA2,LOW);
+    //digitalWrite(MotorB1,LOW);
+    //digitalWrite(MotorB2,HIGH); 
   }
   if  (myData.a == 0) {
-    digitalWrite(MotorA1,LOW);
-    digitalWrite(MotorA2,LOW);
-    digitalWrite(MotorB1,LOW);
-    digitalWrite(MotorB2,LOW); 
+    analogWrite(RightMotorSpeed,noSpeed);
+    analogWrite(LeftMotorSpeed,noSpeed);
+    //digitalWrite(MotorA1,LOW);
+    //digitalWrite(MotorA2,LOW);
+    //digitalWrite(MotorB1,LOW);
+    //digitalWrite(MotorB2,LOW); 
   } 
 }
